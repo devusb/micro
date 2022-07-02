@@ -184,7 +184,9 @@ func InitRuntimeFiles() {
 	isID := regexp.MustCompile(`^[_A-Za-z0-9]+$`).MatchString
 
 	for _, d := range files {
-		if d.IsDir() {
+		realpath, _ := filepath.EvalSymlinks(filepath.Join(configDir, "plugins", d.Name()))
+		realpathStat, _ := os.Stat(realpath)
+		if realpathStat.IsDir() {
 			srcs, _ := ioutil.ReadDir(filepath.Join(plugdir, d.Name()))
 			p := new(Plugin)
 			p.Name = d.Name()
